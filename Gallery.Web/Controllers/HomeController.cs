@@ -6,15 +6,23 @@ using System.Collections.Generic;
 using System.Diagnostics;
 using System.Linq;
 using System.Threading.Tasks;
+using Gallery.Business.Interfaces;
+using Microsoft.AspNetCore.Http;
+using SixLabors.ImageSharp;
+using SixLabors.ImageSharp.Processing;
 
 namespace Gallery.Web.Controllers
 {
     public class HomeController : Controller
     {
+        private IImageRepository _imageRepository;
+        private ICategoryRepository _categoryRepository;
         private readonly ILogger<HomeController> _logger;
 
-        public HomeController(ILogger<HomeController> logger)
+        public HomeController(ILogger<HomeController> logger, IImageRepository imageRepository, ICategoryRepository categoryRepository)
         {
+            _categoryRepository = categoryRepository;
+            _imageRepository = imageRepository;
             _logger = logger;
         }
 
@@ -26,6 +34,12 @@ namespace Gallery.Web.Controllers
         public IActionResult Privacy()
         {
             return View();
+        }
+
+        [HttpPost]
+        public IActionResult Upload(IFormFile file)
+        {
+            return Ok();
         }
 
         [ResponseCache(Duration = 0, Location = ResponseCacheLocation.None, NoStore = true)]

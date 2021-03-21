@@ -13,4 +13,8 @@
     </PackageReference>
   </ItemGroup>
 
+  <ItemGroup>
+    <ProjectReference Include="..\Gallery.Business\Gallery.Business.csproj" />
+  </ItemGroup>
+
 </Project>

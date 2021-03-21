@@ -1,15 +1,12 @@
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
-using Microsoft.AspNetCore.HttpsPolicy;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
-using Gallery.Data.Models;
+using Gallery.Data.Repositories;
 using Microsoft.EntityFrameworkCore;
+using Gallery.Business.Interfaces;
+using Gallery.Models;
 
 namespace Gallery.Web
 {
@@ -25,6 +22,8 @@ namespace Gallery.Web
         // This method gets called by the runtime. Use this method to add services to the container.
         public void ConfigureServices(IServiceCollection services)
         {
+            services.AddTransient<IImageRepository, ImageRepository>();
+            services.AddTransient<ICategoryRepository, CategoryRepository>();
             services.AddDbContext<GalleryDbContext>(options =>
                 options.UseSqlServer(Configuration.GetConnectionString("DefaultConnectionString")));
             services.AddSingleton(Configuration);
