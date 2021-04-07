@@ -41,12 +41,19 @@ namespace Gallery.Web.Controllers
         [HttpPost]
         public IActionResult Upload(IFormFile file, string title, string author, List<Category> categories)
         {
+            var result = false;
             var fileStream = file.OpenReadStream();
             using (var binaryReader = new BinaryReader(fileStream))
             {
                 var fileBytes = binaryReader.ReadBytes((Int32) fileStream.Length);
+                result = _imageRepository.CreateImage(title, author, file.FileName, fileBytes, categories);
             }
-            return Ok();
+
+            if (result)
+            {
+                return Ok();
+            }
+            return BadRequest();
         }
 
         [ResponseCache(Duration = 0, Location = ResponseCacheLocation.None, NoStore = true)]
