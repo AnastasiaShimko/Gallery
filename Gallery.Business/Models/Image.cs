@@ -14,7 +14,7 @@ namespace Gallery.Business.Models
         public string Title { get; set; }
         public string Author { get; set; }
         public string Format { get; set; }
-        byte[] Data { get; set; }
+        public byte[] Data { get; set; }
         public ICollection<Category> Categories { get; set; }
         public Image()
         {

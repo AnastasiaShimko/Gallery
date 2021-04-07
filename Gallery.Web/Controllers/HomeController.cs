@@ -4,9 +4,11 @@ using Microsoft.Extensions.Logging;
 using System;
 using System.Collections.Generic;
 using System.Diagnostics;
+using System.IO;
 using System.Linq;
 using System.Threading.Tasks;
 using Gallery.Business.Interfaces;
+using Gallery.Business.Models;
 using Microsoft.AspNetCore.Http;
 using SixLabors.ImageSharp;
 using SixLabors.ImageSharp.Processing;
@@ -37,8 +39,13 @@ namespace Gallery.Web.Controllers
         }
 
         [HttpPost]
-        public IActionResult Upload(IFormFile file)
+        public IActionResult Upload(IFormFile file, string title, string author, List<Category> categories)
         {
+            var fileStream = file.OpenReadStream();
+            using (var binaryReader = new BinaryReader(fileStream))
+            {
+                var fileBytes = binaryReader.ReadBytes((Int32) fileStream.Length);
+            }
             return Ok();
         }
 
