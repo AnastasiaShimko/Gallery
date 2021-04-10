@@ -46,7 +46,16 @@ namespace Gallery.Web.Controllers
             using (var binaryReader = new BinaryReader(fileStream))
             {
                 var fileBytes = binaryReader.ReadBytes((Int32) fileStream.Length);
-                result = _imageRepository.CreateImage(title, author, file.FileName, fileBytes, categories);
+                var image = new Business.Models.Image()
+                {
+                    Author = author,
+                    Categories = categories,
+                    Data = fileBytes,
+                    Format = file.ContentType,
+                    Title = title
+                };
+
+                result = _imageRepository.CreateImage(image);
             }
 
             if (result)

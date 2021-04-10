@@ -1,0 +1,11 @@
+﻿@model System.Collections.Generic.List<Gallery.Business.Models.Image>
+
+
+@foreach (var f in Model)
+{
+    <p><input type="image" src="data:@f.Format;base64,@Convert.ToBase64String(f.Data)"; style="width:500px;height:300px" /></p>
+    <p><a asp-action="Delete" asp-route-id="@f.ID">Delete</a></p>
+    <p><a asp-action="Edit" asp-route-id="@f.ID">Edit</a></p>
+    <p>@Html.DisplayFor(modelItem => f.Title)</p>
+    <p>@Html.DisplayFor(modelItem => f.Author)</p>
+}

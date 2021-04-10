@@ -8,8 +8,9 @@ namespace Gallery.Business.Interfaces
 {
     public interface IImageRepository
     {
-        public bool CreateImage(string title, string author, string format, byte[] data, List<Category> categories);
-        public bool UpdateImage(int imageid, string title, string author, string format, byte[] data, List<Category> categories);
+        public bool CreateImage(Image image);
+        public Image GetImageById(int id);
+        public bool UpdateImage(Image image);
         public bool DeleteImage(int imageid);
         public List<Image> GetLastFiveImagesByCategory(int categoryid);
     }

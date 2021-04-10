@@ -8,8 +8,9 @@ namespace Gallery.Business.Interfaces
     public interface ICategoryRepository
     {
         List<Category> GetAllCategories();
-        bool CreateCategory(string name, string description);
-        bool UpdateCategory(int categoryid, string name, string description);
+        Category GetCategoryById(int id);
+        bool CreateCategory(Category category);
+        bool UpdateCategory(Category category);
         bool DeleteCategory(int categoryid);
     }
 }

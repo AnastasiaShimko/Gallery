@@ -26,16 +26,8 @@ namespace Gallery.Data.Repositories
             return result;
         }
 
-        public bool CreateImage(string title, string author, string format, byte[] data, List<Category> categories)
+        public bool CreateImage(Image image)
         {
-            var image = new Image()
-            {
-                Author = author,
-                Categories =  categories,
-                Format = format,
-                Title = title,
-                Data = data
-            };
             db.Images.Add(image);
             var result = db.SaveChanges();
             if (result > 0)
@@ -46,16 +38,16 @@ namespace Gallery.Data.Repositories
             return false;
         }
 
-        public bool UpdateImage(int imageid, string title, string author, string format, byte[] data, List<Category> categories)
+        public bool UpdateImage(Image image)
         {
-            Image image = db.Images.FirstOrDefault(c => c.ID == imageid);
-            if (image != null)
+            Image dbImage = db.Images.FirstOrDefault(c => c.ID == image.ID);
+            if (dbImage != null)
             {
-                image.Categories = categories;
-                image.Author = author;
-                image.Data = data;
-                image.Format = format;
-                image.Title = title;
+                dbImage.Categories = image.Categories;
+                dbImage.Author = image.Author;
+                dbImage.Data = image.Data;
+                dbImage.Format = image.Format;
+                dbImage.Title = image.Title;
                 var result = db.SaveChanges();
                 if (result > 0)
                 {
@@ -80,6 +72,11 @@ namespace Gallery.Data.Repositories
             }
 
             return false;
+        }
+
+        public Image GetImageById(int id)
+        {
+            return db.Images.FirstOrDefault(c => c.ID == id);
         }
     }
 }

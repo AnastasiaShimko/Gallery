@@ -17,14 +17,14 @@ namespace Gallery.Data.Repositories
             db = context;
         }
 
-        public bool CreateCategory(string name, string description)
+        public bool CreateCategory(Category category)
         {
-            var categpry = new Category()
+            var dbCategpry = new Category()
             {
-                Name = name,
-                Description = description
+                Name = category.Name,
+                Description = category.Description
             };
-            db.Categories.Add(categpry);
+            db.Categories.Add(dbCategpry);
             var result = db.SaveChanges();
             if (result > 0)
             {
@@ -57,13 +57,18 @@ namespace Gallery.Data.Repositories
             return result;
         }
 
-        public bool UpdateCategory(int categoryid, string name, string description)
+        public Category GetCategoryById(int id)
         {
-            Category category = db.Categories.FirstOrDefault(c => c.ID == categoryid);
-            if (category != null)
+            return db.Categories.FirstOrDefault(c => c.ID == id);
+        }
+
+        public bool UpdateCategory(Category category)
+        {
+            Category dbCategory = db.Categories.FirstOrDefault(c => c.ID == category.ID);
+            if (dbCategory != null)
             {
-                category.Name = name;
-                category.Description = description;
+                dbCategory.Name = category.Name;
+                dbCategory.Description = category.Description;
                 var result = db.SaveChanges();
                 if (result > 0)
                 {
