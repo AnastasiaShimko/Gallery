@@ -71,6 +71,7 @@ namespace Gallery.Web.Controllers
 
         public ActionResult Edit(int id)
         {
+            ViewBag.Categories = new SelectList(_categoryRepository.GetAllCategories(), "ID", "Name");
             return View(_imageRepository.GetImageById(id));
         }
 
@@ -80,6 +81,10 @@ namespace Gallery.Web.Controllers
         {
             if (ModelState.IsValid)
             {
+               /* var imageDb = _imageRepository.GetImageById(image.ID);
+                image.Data = imageDb.Data;
+                image.Format = imageDb.Format;*/
+
                 _imageRepository.UpdateImage(image);
             }
 

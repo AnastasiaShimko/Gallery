@@ -12,6 +12,7 @@ using Gallery.Business.Models;
 using Microsoft.AspNetCore.Http;
 using SixLabors.ImageSharp;
 using SixLabors.ImageSharp.Processing;
+using Image = Gallery.Business.Models.Image;
 
 namespace Gallery.Web.Controllers
 {
@@ -30,39 +31,24 @@ namespace Gallery.Web.Controllers
 
         public IActionResult Index()
         {
+            ViewBag.Categories = _categoryRepository.GetAllCategories();
+            var Images = new List<Image>();
+            foreach (var category in ViewBag.Categories)
+            {
+                List<Image> categoryImages = _imageRepository.GetLastFiveImagesByCategory(category.ID);
+                if (categoryImages.Count > 0)
+                {
+                    Images.AddRange(categoryImages);
+                }
+            }
+            ViewBag.Images = Images.Distinct();
+
             return View();
         }
 
         public IActionResult Privacy()
         {
             return View();
-        }
-
-        [HttpPost]
-        public IActionResult Upload(IFormFile file, string title, string author, List<Category> categories)
-        {
-            var result = false;
-            var fileStream = file.OpenReadStream();
-            using (var binaryReader = new BinaryReader(fileStream))
-            {
-                var fileBytes = binaryReader.ReadBytes((Int32) fileStream.Length);
-                var image = new Business.Models.Image()
-                {
-                    Author = author,
-                    Categories = categories,
-                    Data = fileBytes,
-                    Format = file.ContentType,
-                    Title = title
-                };
-
-                result = _imageRepository.CreateImage(image);
-            }
-
-            if (result)
-            {
-                return Ok();
-            }
-            return BadRequest();
         }
 
         [ResponseCache(Duration = 0, Location = ResponseCacheLocation.None, NoStore = true)]

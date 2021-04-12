@@ -19,11 +19,7 @@ namespace Gallery.Data.Repositories
 
         public List<Image> GetLastFiveImagesByCategory(int categoryid)
         {
-            var result = new List<Image>();
-
-            result  = db.Images.Where(images => images.Categories.Any(c => c.ID == categoryid)).ToList();
-
-            return result;
+            return db.Images.Where(images => images.Categories.Any(c => c.ID == categoryid)).ToList();
         }
 
         public bool CreateImage(Image image)
