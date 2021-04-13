@@ -13,5 +13,6 @@ namespace Gallery.Business.Interfaces
         public bool UpdateImage(Image image);
         public bool DeleteImage(int imageid);
         public List<Image> GetLastFiveImagesByCategory(int categoryid);
+        public List<Image> GetAllImagesByCategory(int categoryid);
     }
 }

@@ -25,9 +25,10 @@ namespace Gallery.Web.Controllers
             _logger = logger;
         }
 
-        public IActionResult Index()
+        [HttpGet]
+        public IActionResult Index(int categoryid)
         {
-            return View(_imageRepository.GetLastFiveImagesByCategory(1));
+            return View(_imageRepository.GetAllImagesByCategory(categoryid));
         }
 
         [HttpGet]

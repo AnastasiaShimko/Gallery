@@ -38,6 +38,10 @@ namespace Gallery.Web.Controllers
                 List<Image> categoryImages = _imageRepository.GetLastFiveImagesByCategory(category.ID);
                 if (categoryImages.Count > 0)
                 {
+                    foreach (var img in categoryImages)
+                    {
+                        img.Categories = new List<Category>(){category};
+                    }
                     Images.AddRange(categoryImages);
                 }
             }

@@ -19,7 +19,15 @@ namespace Gallery.Data.Repositories
 
         public List<Image> GetLastFiveImagesByCategory(int categoryid)
         {
-            return db.Images.Where(images => images.Categories.Any(c => c.ID == categoryid)).ToList();
+            var images = db.Images.OrderByDescending(s => s.ID).Where(images => images.Categories.Any(c => c.ID == categoryid)).ToList();
+            if (images.Count < 5)
+            {
+                return images;
+            }
+            else
+            {
+                return images.GetRange(0, 5);
+            }
         }
 
         public bool CreateImage(Image image)
@@ -73,6 +81,11 @@ namespace Gallery.Data.Repositories
         public Image GetImageById(int id)
         {
             return db.Images.FirstOrDefault(c => c.ID == id);
+        }
+
+        public List<Image> GetAllImagesByCategory(int categoryid)
+        {
+            return db.Images.Where(images => images.Categories.Any(c => c.ID == categoryid)).ToList();
         }
     }
 }
