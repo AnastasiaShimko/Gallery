@@ -15,5 +15,6 @@ namespace Gallery.Models
         }
         public DbSet<Image> Images { get; set; }
         public DbSet<Category> Categories { get; set; }
+        public DbSet<User> Users { get; set; }
     }
 }

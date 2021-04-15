@@ -6,6 +6,7 @@ using System.Linq;
 using System.Threading.Tasks;
 using Gallery.Business.Interfaces;
 using Gallery.Business.Models;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc.Rendering;
 using Microsoft.Extensions.Logging;
@@ -31,6 +32,7 @@ namespace Gallery.Web.Controllers
             return View(_imageRepository.GetAllImagesByCategory(categoryid));
         }
 
+        [Authorize]
         [HttpGet]
         public IActionResult Create()
         {
@@ -38,6 +40,7 @@ namespace Gallery.Web.Controllers
             return View();
         }
 
+        [Authorize]
         [HttpPost]
         [ValidateAntiForgeryToken]
         public ActionResult Create(IFormFile file, string title, string author, List<int> categories)
@@ -70,12 +73,14 @@ namespace Gallery.Web.Controllers
             return RedirectToAction(nameof(Index));
         }
 
+        [Authorize]
         public ActionResult Edit(int id)
         {
             ViewBag.Categories = new SelectList(_categoryRepository.GetAllCategories(), "ID", "Name");
             return View(_imageRepository.GetImageById(id));
         }
 
+        [Authorize]
         [HttpPost]
         [ValidateAntiForgeryToken]
         public ActionResult Edit(Image image)
@@ -92,6 +97,7 @@ namespace Gallery.Web.Controllers
             return RedirectToAction(nameof(Index));
         }
 
+        [Authorize]
         public ActionResult Delete(int id)
         {
             var image = _imageRepository.GetImageById(id);
@@ -100,6 +106,7 @@ namespace Gallery.Web.Controllers
             return View(image);
         }
 
+        [Authorize]
         [HttpPost]
         [ValidateAntiForgeryToken]
         public ActionResult Delete(Image image)

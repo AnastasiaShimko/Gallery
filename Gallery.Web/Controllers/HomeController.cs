@@ -4,18 +4,15 @@ using Microsoft.Extensions.Logging;
 using System;
 using System.Collections.Generic;
 using System.Diagnostics;
-using System.IO;
 using System.Linq;
-using System.Threading.Tasks;
 using Gallery.Business.Interfaces;
 using Gallery.Business.Models;
-using Microsoft.AspNetCore.Http;
-using SixLabors.ImageSharp;
-using SixLabors.ImageSharp.Processing;
+using Microsoft.AspNetCore.Authorization;
 using Image = Gallery.Business.Models.Image;
 
 namespace Gallery.Web.Controllers
 {
+    [AllowAnonymous]
     public class HomeController : Controller
     {
         private IImageRepository _imageRepository;

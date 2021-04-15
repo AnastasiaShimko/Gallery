@@ -5,10 +5,12 @@ using System.Linq;
 using System.Threading.Tasks;
 using Gallery.Business.Interfaces;
 using Gallery.Business.Models;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.Extensions.Logging;
 
 namespace Gallery.Web.Controllers
 {
+    [Authorize]
     public class CategoryController : Controller
     {
         private ICategoryRepository _categoryRepository;

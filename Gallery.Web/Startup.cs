@@ -7,6 +7,7 @@ using Gallery.Data.Repositories;
 using Microsoft.EntityFrameworkCore;
 using Gallery.Business.Interfaces;
 using Gallery.Models;
+using Microsoft.AspNetCore.Authentication.Cookies;
 
 namespace Gallery.Web
 {
@@ -24,9 +25,17 @@ namespace Gallery.Web
         {
             services.AddTransient<IImageRepository, ImageRepository>();
             services.AddTransient<ICategoryRepository, CategoryRepository>();
+            services.AddTransient<IUserRepository, UserRepository>();
             services.AddDbContext<GalleryDbContext>(options =>
                 options.UseSqlServer(Configuration.GetConnectionString("DefaultConnectionString")));
             services.AddSingleton(Configuration);
+
+            services.AddAuthentication(CookieAuthenticationDefaults.AuthenticationScheme)
+                .AddCookie(options => 
+                {
+                    options.LoginPath = new Microsoft.AspNetCore.Http.PathString("/Account/Login");
+                });
+
             services.AddControllersWithViews();
         }
 
@@ -47,8 +56,9 @@ namespace Gallery.Web
             app.UseStaticFiles();
 
             app.UseRouting();
-
-            app.UseAuthorization();
+            
+            app.UseAuthentication(); 
+            app.UseAuthorization(); 
 
             app.UseEndpoints(endpoints =>
             {
