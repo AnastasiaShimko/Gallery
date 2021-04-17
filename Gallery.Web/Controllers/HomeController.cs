@@ -29,7 +29,7 @@ namespace Gallery.Web.Controllers
         public IActionResult Index()
         {
             ViewBag.Categories = _categoryRepository.GetAllCategories();
-            var Images = new List<Image>();
+            var images = new List<Image>();
             foreach (var category in ViewBag.Categories)
             {
                 List<Image> categoryImages = _imageRepository.GetLastFiveImagesByCategory(category.ID);
@@ -39,10 +39,10 @@ namespace Gallery.Web.Controllers
                     {
                         img.Categories = new List<Category>(){category};
                     }
-                    Images.AddRange(categoryImages);
+                    images.AddRange(categoryImages);
                 }
             }
-            ViewBag.Images = Images.Distinct();
+            ViewBag.Images = images.Distinct();
 
             return View();
         }

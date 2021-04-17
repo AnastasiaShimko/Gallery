@@ -45,8 +45,7 @@ namespace Gallery.Web.Controllers
 
             return View(user);
         }
-
-        [Authorize]
+        
         [HttpGet]
         public IActionResult Register()
         {

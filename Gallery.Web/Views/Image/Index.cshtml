@@ -4,12 +4,18 @@
         <a asp-action="Create">Upload New Image</a>
     </p>
 
+<form asp-controller="Image" asp-action="Index">
+    <p>
+        Title: <input type="text" name="SearchString" />
+        <input type="submit" value="Filter" />
+    </p>
+</form>
+
     @foreach (var f in Model)
     {
-        <p><input type="image" src="data:@f.Format;base64,@Convert.ToBase64String(f.Data)" ; style="        width: 100%;
-        height: 100%
-" /></p>
-        <p><a asp-action="Delete" asp-route-id="@f.ID">Delete</a><a asp-action="Edit" asp-route-id="@f.ID">Edit</a></p>
-        <p>@Html.DisplayFor(modelItem => f.Title)
+        <p><input type="image" src="data:@f.Format;base64,@Convert.ToBase64String(f.Data)" ; style="width: 100%;height: 100%"/></p>
+        <p><a asp-action="Delete" asp-route-id="@f.ID">Delete</a><br/>
+            <a asp-action="Edit" asp-route-id="@f.ID">Edit</a></p>
+        <p>@Html.DisplayFor(modelItem => f.Title) 
             @Html.DisplayFor(modelItem => f.Author)</p>
     }

@@ -11,10 +11,9 @@ namespace Gallery.Business.Models
         [Key]
         [DatabaseGenerated(DatabaseGeneratedOption.Identity)]
         public int ID { get; set; }
-        [Required(ErrorMessage = "Не указан Email")]
+        [Required(ErrorMessage = "Email is required")]
         public string Email { get; set; }
-
-        [Required(ErrorMessage = "Не указан пароль")]
+        [Required(ErrorMessage = "Password is required")]
         [DataType(DataType.Password)]
         public string Password { get; set; }
     }

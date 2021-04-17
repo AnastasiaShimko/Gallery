@@ -27,9 +27,27 @@ namespace Gallery.Web.Controllers
         }
 
         [HttpGet]
+        public IActionResult Search(string searchString)
+        {
+            return View(nameof(Index),_imageRepository.SearchImagesByString(searchString));
+        }
+
+        [HttpPost]
+        public IActionResult Index(string searchString)
+        {
+            return View(_imageRepository.SearchImagesByString(searchString));
+        }
+
+        [HttpGet]
         public IActionResult Index(int categoryid)
         {
             return View(_imageRepository.GetAllImagesByCategory(categoryid));
+        }
+
+        [HttpGet]
+        public IActionResult Get(int imageId)
+        {
+            return View(_imageRepository.GetImageById(imageId));
         }
 
         [Authorize]
@@ -43,7 +61,7 @@ namespace Gallery.Web.Controllers
         [Authorize]
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public ActionResult Create(IFormFile file, string title, string author, List<int> categories)
+        public ActionResult Create(IFormFile file, Image image, List<int> categories)
         {
             if (ModelState.IsValid)
             {
@@ -59,18 +77,21 @@ namespace Gallery.Web.Controllers
                     var fileBytes = binaryReader.ReadBytes((Int32)fileStream.Length);
                     var newImage = new Image()
                     {
-                        Author = author,
+                        Author = image.Author,
                         Categories = categoriesList,
                         Data = fileBytes,
                         Format = file.ContentType,
-                        Title = title
+                        Title = image.Title
                     };
 
                     result = _imageRepository.CreateImage(newImage);
+                    return RedirectToAction(nameof(Index));
                 }
             }
-
-            return RedirectToAction(nameof(Index));
+            else
+            {
+                return View(image);
+            }
         }
 
         [Authorize]
@@ -83,14 +104,16 @@ namespace Gallery.Web.Controllers
         [Authorize]
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public ActionResult Edit(Image image)
+        public ActionResult Edit(Image image, List<int> categories)
         {
             if (ModelState.IsValid)
             {
-               /* var imageDb = _imageRepository.GetImageById(image.ID);
-                image.Data = imageDb.Data;
-                image.Format = imageDb.Format;*/
-
+                var categoriesList = new List<Category>();
+                foreach (var categoryId in categories)
+                {
+                    categoriesList.Add(_categoryRepository.GetCategoryById(categoryId));
+                }
+                image.Categories = categoriesList;
                 _imageRepository.UpdateImage(image);
             }
 

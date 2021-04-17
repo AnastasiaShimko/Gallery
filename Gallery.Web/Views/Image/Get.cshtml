@@ -1,0 +1,16 @@
+﻿@model Gallery.Business.Models.Image
+
+<h4>@Model.Title</h4>
+
+<div class="container pp-section">
+    <div class="h5 font-weight-normal">Author: @Model.Author</div>
+    <img class="img-fluid mt-4" src="data:@Model.Format;base64,@Convert.ToBase64String(@Model.Data)" />
+    <div class="row mt-5">
+        <div class="col-md-3">
+            @foreach (var item in Model.Categories)
+            {
+                <a class="mr-1 badge badge-primary" asp-controller="Image" asp-action="Index" asp-route-categoryid="@item.ID">@item.Name</a>
+            }
+        </div>
+    </div>
+</div>

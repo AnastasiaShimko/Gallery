@@ -4,10 +4,8 @@
     ViewData["Title"] = "Edit";
 }
 
-<h1>Edit</h1>
+<h1>Edit Image</h1>
 
-<h4>Photo</h4>
-<hr />
 <div class="row">
     <div class="col-md-4">
         <form asp-action="Edit">
@@ -17,15 +15,15 @@
             <input type="hidden" asp-for="Format" />
             <div class="form-group">
                 <label asp-for="Title" class="control-label"></label>
-                <input type="text" asp-for="Title" value="@Model.Title" />
+                <input type="text" asp-for="Title" value="@Model.Title" class="form-control" />
             </div>
             <div class="form-group">
                 <label asp-for="Author" class="control-label"></label>
-                <input type="text" asp-for="Author" value="@Model.Author" />
+                <input type="text" asp-for="Author" value="@Model.Author" class="form-control" />
             </div>
             <div class="form-group">
                 <select asp-for="Categories" asp-items="ViewBag.Categories" value="@Model.Categories"></select>
-                <input type="hidden" asp-for="Categories" />
+                <input type="hidden" asp-for="Categories" class="form-control" />
             </div>
             <div class="form-group">
                 <input type="submit" value="Save" class="btn btn-primary" />

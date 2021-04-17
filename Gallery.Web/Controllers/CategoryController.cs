@@ -40,9 +40,12 @@ namespace Gallery.Web.Controllers
             if (ModelState.IsValid)
             {
                 _categoryRepository.CreateCategory(category);
+                return RedirectToAction(nameof(Index));
             }
-
-            return RedirectToAction(nameof(Index));
+            else
+            {
+                return View(category);
+            }
         }
 
         public ActionResult Edit(int id)
@@ -71,11 +74,10 @@ namespace Gallery.Web.Controllers
         [ValidateAntiForgeryToken]
         public ActionResult Delete(Category category)
         {
-            if (ModelState.IsValid)
+            if (category.ID > 0)
             {
                 _categoryRepository.DeleteCategory(category.ID);
             }
-
             return RedirectToAction(nameof(Index));
         }
     }

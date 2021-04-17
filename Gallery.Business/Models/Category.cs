@@ -11,7 +11,9 @@ namespace Gallery.Business.Models
         [Key]
         [DatabaseGenerated(DatabaseGeneratedOption.Identity)]
         public int ID { get; set; }
+        [Required(ErrorMessage = "Name is required")]
         public string Name { get; set; }
+        [Required(ErrorMessage = "Description is required")]
         public string Description { get; set; }
         public ICollection<Image> Images { get; set; }
         public Category()
