@@ -5,6 +5,7 @@ using System;
 using System.Collections.Generic;
 using System.Diagnostics;
 using System.Linq;
+using System.Threading.Tasks;
 using Gallery.Business.Interfaces;
 using Gallery.Business.Models;
 using Microsoft.AspNetCore.Authorization;
@@ -26,13 +27,13 @@ namespace Gallery.Web.Controllers
             _logger = logger;
         }
 
-        public IActionResult Index()
+        public async Task<IActionResult> Index()
         {
-            ViewBag.Categories = _categoryRepository.GetAllCategories();
+            ViewBag.Categories =await _categoryRepository.GetAllCategories();
             var images = new List<Image>();
             foreach (var category in ViewBag.Categories)
             {
-                List<Image> categoryImages = _imageRepository.GetLastFiveImagesByCategory(category.ID);
+                List<Image> categoryImages = await _imageRepository.GetLastFiveImagesByCategory(category.ID);
                 if (categoryImages.Count > 0)
                 {
                     foreach (var img in categoryImages)

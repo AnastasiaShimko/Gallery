@@ -13,7 +13,7 @@ namespace Gallery.Web.Controllers
     [Authorize]
     public class CategoryController : Controller
     {
-        private ICategoryRepository _categoryRepository;
+        private readonly ICategoryRepository _categoryRepository;
         private readonly ILogger<HomeController> _logger;
 
         public CategoryController(ILogger<HomeController> logger, ICategoryRepository categoryRepository)
@@ -22,9 +22,17 @@ namespace Gallery.Web.Controllers
             _logger = logger;
         }
         
-        public IActionResult Index()
+        public async Task<IActionResult> Index()
         {
-            return View(_categoryRepository.GetAllCategories());
+            try
+            {
+                var categories = await _categoryRepository.GetAllCategories();
+                return View(categories);
+            }
+            catch
+            {
+                return BadRequest();
+            }
         }
 
         [HttpGet]
@@ -35,14 +43,21 @@ namespace Gallery.Web.Controllers
 
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public ActionResult Create(Category category)
+        public async Task<ActionResult> Create(Category category)
         {
-            if (ModelState.IsValid)
+            try
             {
-                _categoryRepository.CreateCategory(category);
-                return RedirectToAction(nameof(Index));
+                if (ModelState.IsValid)
+                {
+                    await _categoryRepository.CreateCategory(category);
+                    return RedirectToAction(nameof(Index));
+                }
+                else
+                {
+                    return View(category);
+                }
             }
-            else
+            catch
             {
                 return View(category);
             }
@@ -50,35 +65,60 @@ namespace Gallery.Web.Controllers
 
         public ActionResult Edit(int id)
         {
-            return View(_categoryRepository.GetCategoryById(id));
+            try
+            {
+                var category = _categoryRepository.GetCategoryById(id);
+                return View(category);
+            }
+            catch
+            {
+                return BadRequest();
+            }
         }
 
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public ActionResult Edit(Category category)
+        public async Task<ActionResult> Edit(Category category)
         {
             if (ModelState.IsValid)
             {
-                _categoryRepository.UpdateCategory(category);
+                try
+                {
+                    await _categoryRepository.UpdateCategory(category);
+                }
+                catch
+                {
+                    BadRequest();
+                }
             }
-
             return RedirectToAction(nameof(Index));
         }
 
-        public ActionResult Delete(int id)
+        public async Task<ActionResult> Delete(int id)
         {
-            return View(_categoryRepository.GetCategoryById(id));
+            try
+            {
+                return View(_categoryRepository.GetCategoryById(id));
+            }
+            catch
+            {
+                return BadRequest();
+            }
         }
 
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public ActionResult Delete(Category category)
+        public async Task<ActionResult> Delete(Category category)
         {
-            if (category.ID > 0)
+            try
             {
-                _categoryRepository.DeleteCategory(category.ID);
+                await _categoryRepository.DeleteCategory(category.ID);
+                return RedirectToAction(nameof(Index));
             }
-            return RedirectToAction(nameof(Index));
+            catch
+            {
+                return BadRequest();
+            }
         }
     }
 }

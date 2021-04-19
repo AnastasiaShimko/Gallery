@@ -6,6 +6,7 @@ using Microsoft.Extensions.Hosting;
 using Gallery.Data.Repositories;
 using Microsoft.EntityFrameworkCore;
 using Gallery.Business.Interfaces;
+using Gallery.Business.Services;
 using Gallery.Models;
 using Microsoft.AspNetCore.Authentication.Cookies;
 
@@ -37,6 +38,7 @@ namespace Gallery.Web
                 });
 
             services.AddControllersWithViews();
+            services.AddScoped<ImageService>();
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.

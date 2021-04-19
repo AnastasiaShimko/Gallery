@@ -32,20 +32,25 @@ namespace Gallery.Web.Controllers
         {
             if (ModelState.IsValid)
             {
-                User dbUser = await _userRepository.CheckUser(user);
-                if (dbUser != null)
+                try
                 {
-                    await Authenticate(user.Email);
+                    User dbUser = await _userRepository.CheckUser(user);
+                    if (dbUser != null)
+                    {
+                        await Authenticate(user.Email);
 
-                    return RedirectToAction("Index", "Home");
+                        return RedirectToAction("Index", "Home");
+                    }
+                    ModelState.AddModelError("", "Invalid username or password.");
                 }
-
-                ModelState.AddModelError("", "Invalid username or password.");
+                catch
+                {
+                    return BadRequest();
+                }
             }
-
             return View(user);
         }
-        
+
         [HttpGet]
         public IActionResult Register()
         {
@@ -58,19 +63,23 @@ namespace Gallery.Web.Controllers
         {
             if (ModelState.IsValid)
             {
-                User dbUser = await _userRepository.GetUserByEmail(user);
-                if (dbUser == null)
+                try
                 {
-                    var res = await _userRepository.CreateUserAsync(user);
-
-                    await Authenticate(user.Email);
-
-                    return RedirectToAction("Index", "Home");
+                    User dbUser = await _userRepository.GetUserByEmail(user);
+                    if (dbUser == null)
+                    {
+                        await _userRepository.CreateUserAsync(user);
+                        await Authenticate(user.Email);
+                        return RedirectToAction("Index", "Home");
+                    }
+                    else
+                        ModelState.AddModelError("", "Invalid username or password.");
                 }
-                else
-                    ModelState.AddModelError("", "Invalid username or password.");
+                catch
+                {
+                    return BadRequest();
+                }
             }
-
             return View(user);
         }
 

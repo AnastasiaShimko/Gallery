@@ -10,6 +10,6 @@ namespace Gallery.Business.Interfaces
     {
         Task<User> CheckUser(User user);
         Task<User> GetUserByEmail(User user);
-        Task<bool> CreateUserAsync(User user);
+        Task CreateUserAsync(User user);
     }
 }

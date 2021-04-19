@@ -2,9 +2,11 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
+using System.Threading.Tasks;
 using Gallery.Business.Interfaces;
 using Gallery.Business.Models;
 using Gallery.Models;
+using Microsoft.EntityFrameworkCore;
 
 namespace Gallery.Data.Repositories
 {
@@ -17,44 +19,25 @@ namespace Gallery.Data.Repositories
             db = context;
         }
 
-        public bool CreateCategory(Category category)
+        public async Task CreateCategory(Category category)
         {
-            var dbCategpry = new Category()
-            {
-                Name = category.Name,
-                Description = category.Description
-            };
-            db.Categories.Add(dbCategpry);
-            var result = db.SaveChanges();
-            if (result > 0)
-            {
-                return true;
-            }
-
-            return false;
+            await db.Categories.AddAsync(category);
+            await db.SaveChangesAsync();
         }
 
-        public bool DeleteCategory(int categoryid)
+        public async Task DeleteCategory(int categoryid)
         {
             Category category = db.Categories.FirstOrDefault(c => c.ID == categoryid);
             if (category != null)
             {
                 db.Categories.Remove(category);
-                var result = db.SaveChanges();
-                if (result > 0)
-                {
-                    return true;
-                }
+                await db.SaveChangesAsync();
             }
-
-            return false;
         }
 
-        public List<Category> GetAllCategories()
+        public Task<List<Category>> GetAllCategories()
         {
-            var result =  db.Categories.ToList();
-
-            return result;
+            return db.Categories.ToListAsync();
         }
 
         public Category GetCategoryById(int id)
@@ -62,21 +45,15 @@ namespace Gallery.Data.Repositories
             return db.Categories.FirstOrDefault(c => c.ID == id);
         }
 
-        public bool UpdateCategory(Category category)
+        public async Task UpdateCategory(Category category)
         {
-            Category dbCategory = db.Categories.FirstOrDefault(c => c.ID == category.ID);
+            Category dbCategory = await db.Categories.FirstOrDefaultAsync(c => c.ID == category.ID);
             if (dbCategory != null)
             {
                 dbCategory.Name = category.Name;
                 dbCategory.Description = category.Description;
-                var result = db.SaveChanges();
-                if (result > 0)
-                {
-                    return true;
-                }
+                await db.SaveChangesAsync();
             }
-
-            return false;
         }
     }
 }

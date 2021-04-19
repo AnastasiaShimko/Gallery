@@ -2,9 +2,11 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
+using System.Threading.Tasks;
 using Gallery.Business.Interfaces;
 using Gallery.Business.Models;
 using Gallery.Models;
+using Microsoft.EntityFrameworkCore;
 
 namespace Gallery.Data.Repositories
 {
@@ -17,39 +19,23 @@ namespace Gallery.Data.Repositories
             db = context;
         }
 
-        public List<Image> GetLastFiveImagesByCategory(int categoryid)
+        public Task<List<Image>> GetLastFiveImagesByCategory(int categoryid)
         {
-            try
+            var imagesList = db.Images.OrderByDescending(s => s.ID).Where(images => images.Categories.Any(c => c.ID == categoryid)).ToList();
+            return Task.FromResult((imagesList.Count < 5) switch
             {
-                var imagesList = db.Images.OrderByDescending(s => s.ID).Where(images => images.Categories.Any(c => c.ID == categoryid)).ToList();
-                if (imagesList.Count < 5)
-                {
-                    return imagesList;
-                }
-                else
-                {
-                    return imagesList.GetRange(0, 5);
-                }
-            }
-            catch
-            {
-                return new List<Image>();
-            }
+                true => imagesList,
+                _ => imagesList.GetRange(0, 5)
+            });
         }
 
-        public bool CreateImage(Image image)
+        public async Task CreateImage(Image image)
         {
-            db.Images.Add(image);
-            var result = db.SaveChanges();
-            if (result > 0)
-            {
-                return true;
-            }
-
-            return false;
+            await db.Images.AddAsync(image);
+            await db.SaveChangesAsync();
         }
 
-        public bool UpdateImage(Image image)
+        public async Task UpdateImage(Image image)
         {
             Image dbImage = db.Images.FirstOrDefault(c => c.ID == image.ID);
             if (dbImage != null)
@@ -59,45 +45,33 @@ namespace Gallery.Data.Repositories
                 dbImage.Data = image.Data;
                 dbImage.Format = image.Format;
                 dbImage.Title = image.Title;
-                var result = db.SaveChanges();
-                if (result > 0)
-                {
-                    return true;
-                }
+                await db.SaveChangesAsync();
             }
-
-            return false;
         }
 
-        public bool DeleteImage(int imageid)
+        public async Task DeleteImage(int imageid)
         {
             Image image = db.Images.FirstOrDefault(c => c.ID == imageid);
             if (image != null)
             {
                 db.Images.Remove(image);
-                var result = db.SaveChanges();
-                if (result > 0)
-                {
-                    return true;
-                }
+                await db.SaveChangesAsync();
             }
-
-            return false;
         }
 
-        public Image GetImageById(int id)
+        public async Task<Image> GetImageById(int id)
         {
-            return db.Images.FirstOrDefault(c => c.ID == id);
+            return await db.Images.FirstOrDefaultAsync(c => c.ID == id);
         }
 
-        public List<Image> GetAllImagesByCategory(int categoryid)
+        public async Task<List<Image>> GetAllImagesByCategory(int categoryid)
         {
-            return db.Images.Where(images => images.Categories.Any(c => c.ID == categoryid)).ToList();
+            return await db.Images.Where(images => images.Categories.Any(c => c.ID == categoryid)).ToListAsync();
         }
 
-        public List<Image> SearchImagesByString(string searchString)
+        public async Task<List<Image>> SearchImagesByString(string searchString)
         {
-            return db.Images.Where(s => s.Title.Contains(searchString)).ToList();
+            return await db.Images.Where(s => s.Title.Contains(searchString)).ToListAsync();
         }
     }
 }

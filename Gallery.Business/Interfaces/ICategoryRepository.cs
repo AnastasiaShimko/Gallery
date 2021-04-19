@@ -1,16 +1,17 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Text;
+using System.Threading.Tasks;
 using Gallery.Business.Models;
 
 namespace Gallery.Business.Interfaces
 {
     public interface ICategoryRepository
     {
-        List<Category> GetAllCategories();
+        Task<List<Category>> GetAllCategories();
         Category GetCategoryById(int id);
-        bool CreateCategory(Category category);
-        bool UpdateCategory(Category category);
-        bool DeleteCategory(int categoryid);
+        Task CreateCategory(Category category);
+        Task UpdateCategory(Category category);
+        Task DeleteCategory(int categoryid);
     }
 }

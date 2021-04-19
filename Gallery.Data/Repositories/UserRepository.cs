@@ -18,15 +18,10 @@ namespace Gallery.Data.Repositories
             db = context;
         }
 
-        public async Task<bool> CreateUserAsync(User user)
+        public async Task CreateUserAsync(User user)
         {
             db.Users.Add(new User { Email = user.Email, Password = user.Password });
-            var result = await db.SaveChangesAsync();
-            if (result > 0)
-            {
-                return true;
-            }
-            return false;
+            await db.SaveChangesAsync();
         }
 
         public Task<User> CheckUser(User user)
