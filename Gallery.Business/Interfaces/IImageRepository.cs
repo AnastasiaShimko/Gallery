@@ -16,5 +16,6 @@ namespace Gallery.Business.Interfaces
         Task<List<Image>> GetLastFiveImagesByCategory(int categoryid);
         Task<List<Image>> GetAllImagesByCategory(int categoryid);
         Task<List<Image>> SearchImagesByString(string searchString);
+        Task<List<Image>> GetAllImages();
     }
 }

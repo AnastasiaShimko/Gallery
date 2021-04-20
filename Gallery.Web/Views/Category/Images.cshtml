@@ -1,0 +1,30 @@
+﻿@using Gallery.Business.Models
+@model System.Collections.Generic.List<Gallery.Business.Models.Image>
+@{
+    Layout = "_Layout";
+}
+<div class="page-content">
+    <div class="container">
+
+        <h2>@ViewBag.Category.Name</h2>
+
+        <div class="container pp-section">
+            <p>@ViewBag.Category.Description</p>
+        </div>
+
+        <div class="container px-0">
+            <div class="pp-gallery">
+                @foreach (Image image in @Model)
+                {
+                    <div>
+                        <a asp-controller="Image" asp-action="Get" asp-route-imageId="@image.ID">
+                            <p>@image.Title by @image.Author</p>
+                            <img class="img-fluid mt-4" src="data:@image.Format;base64,@Convert.ToBase64String(@image.Data)" />
+                        </a>
+                    </div>
+                    <br/>
+                }
+            </div>
+        </div>
+    </div>
+</div>

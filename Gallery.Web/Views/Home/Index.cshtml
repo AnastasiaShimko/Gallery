@@ -34,15 +34,15 @@
                             </a>
                         </div>
                     }
-                </div>
+                    </div>
             </div>
         </div>
-        <form asp-controller="Image" asp-action="Index">
-            <p>
-                Title: <input type="text" name="SearchString" />
-                <input type="submit" value="Search" />
-            </p>
-        </form>
-        <div class="pp-section"></div>
+        <div class="pp-section">
+            <a class="btn btn-outline-primary" asp-controller="Image" asp-action="Index">All Photos</a>
+            @foreach (var item in @ViewBag.Categories)
+            {
+                <a class="btn btn-outline-primary" asp-controller="Category" asp-action="Images" asp-route-categoryid="@item.ID">@item.Name</a>
+            }
+            </div>
     </div>
 </div>

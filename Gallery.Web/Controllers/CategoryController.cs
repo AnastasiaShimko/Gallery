@@ -10,15 +10,16 @@ using Microsoft.Extensions.Logging;
 
 namespace Gallery.Web.Controllers
 {
-    [Authorize]
     public class CategoryController : Controller
     {
         private readonly ICategoryRepository _categoryRepository;
+        private readonly IImageRepository _imageRepository;
         private readonly ILogger<HomeController> _logger;
 
-        public CategoryController(ILogger<HomeController> logger, ICategoryRepository categoryRepository)
+        public CategoryController(ILogger<HomeController> logger, ICategoryRepository categoryRepository, IImageRepository imageRepository)
         {
             _categoryRepository = categoryRepository;
+            _imageRepository = imageRepository;
             _logger = logger;
         }
         
@@ -35,12 +36,28 @@ namespace Gallery.Web.Controllers
             }
         }
 
+        public async Task<IActionResult> Images(int categoryid)
+        {
+            try
+            {
+                var images = await _imageRepository.GetAllImagesByCategory(categoryid);
+                ViewBag.Category = _categoryRepository.GetCategoryById(categoryid);
+                return View(images);
+            }
+            catch
+            {
+                return BadRequest();
+            }
+        }
+
+        [Authorize]
         [HttpGet]
         public IActionResult Create()
         {
             return View();
         }
 
+        [Authorize]
         [HttpPost]
         [ValidateAntiForgeryToken]
         public async Task<ActionResult> Create(Category category)
@@ -63,6 +80,7 @@ namespace Gallery.Web.Controllers
             }
         }
 
+        [Authorize]
         public ActionResult Edit(int id)
         {
             try
@@ -76,6 +94,7 @@ namespace Gallery.Web.Controllers
             }
         }
 
+        [Authorize]
         [HttpPost]
         [ValidateAntiForgeryToken]
         public async Task<ActionResult> Edit(Category category)
@@ -94,6 +113,7 @@ namespace Gallery.Web.Controllers
             return RedirectToAction(nameof(Index));
         }
 
+        [Authorize]
         public async Task<ActionResult> Delete(int id)
         {
             try
@@ -106,6 +126,7 @@ namespace Gallery.Web.Controllers
             }
         }
 
+        [Authorize]
         [HttpPost]
         [ValidateAntiForgeryToken]
         public async Task<ActionResult> Delete(Category category)

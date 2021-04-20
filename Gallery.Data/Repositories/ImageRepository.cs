@@ -73,5 +73,9 @@ namespace Gallery.Data.Repositories
         {
             return await db.Images.Where(s => s.Title.Contains(searchString)).ToListAsync();
         }
+        public async Task<List<Image>> GetAllImages()
+        {
+            return await db.Images.ToListAsync();
+        }
     }
 }

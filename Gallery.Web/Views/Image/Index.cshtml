@@ -1,8 +1,11 @@
 ﻿@model System.Collections.Generic.List<Gallery.Business.Models.Image>
 
+@if (User.Identity.IsAuthenticated)
+{
     <p>
         <a asp-action="Create">Upload New Image</a>
     </p>
+}
 
 <form asp-controller="Image" asp-action="Index">
     <p>
@@ -11,11 +14,34 @@
     </p>
 </form>
 
-    @foreach (var f in Model)
-    {
-        <p><input type="image" src="data:@f.Format;base64,@Convert.ToBase64String(f.Data)" ; style="width: 100%;height: 100%"/></p>
-        <p><a asp-action="Delete" asp-route-id="@f.ID">Delete</a><br/>
-            <a asp-action="Edit" asp-route-id="@f.ID">Edit</a></p>
-        <p>@Html.DisplayFor(modelItem => f.Title) 
-            @Html.DisplayFor(modelItem => f.Author)</p>
-    }
+<div class="container px-0">
+    <div class="pp-gallery">
+        @foreach (var f in Model)
+        {
+            <div class="card-columns">
+                <p>
+                    Title: @Html.DisplayFor(modelItem => f.Title) <br/>
+                    Author: @Html.DisplayFor(modelItem => f.Author)
+                </p>
+                <p><input type="image" src="data:@f.Format;base64,@Convert.ToBase64String(f.Data)" ; style="width: 100%;height: 100%"/></p>
+                @if (User.Identity.IsAuthenticated)
+                {
+                    <p>
+                        <a asp-action="Delete" asp-route-id="@f.ID">Delete</a><br />
+                        <a asp-action="Edit" asp-route-id="@f.ID">Edit</a>
+                    </p>
+                }
+            </div>
+        }
+    </div>
+</div>
+
+<div id="myModal" class="modal fade" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-body">
+                <img src="//placehold.it/1000x600" class="img-responsive">
+            </div>
+        </div>
+    </div>
+</div>

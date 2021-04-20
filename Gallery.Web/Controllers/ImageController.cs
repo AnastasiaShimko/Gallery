@@ -42,15 +42,23 @@ namespace Gallery.Web.Controllers
         }
 
         [HttpGet]
-        public async Task<IActionResult> Index(int categoryid)
+        public async Task<IActionResult> Index()
         {
-            return View(await _imageRepository.GetAllImagesByCategory(categoryid));
+            return View(await _imageRepository.GetAllImages());
         }
 
         [HttpGet]
         public async Task<IActionResult> Get(int imageId)
         {
-            return View(await _imageRepository.GetImageById(imageId));
+            try
+            {
+                var image = await _imageRepository.GetImageById(imageId);
+                return View(image);
+            }
+            catch
+            {
+                return BadRequest();
+            }
         }
 
         [Authorize]
@@ -112,10 +120,7 @@ namespace Gallery.Web.Controllers
         [ValidateAntiForgeryToken]
         public async Task<ActionResult> Delete(Image image)
         {
-            if (ModelState.IsValid)
-            {
-                await _imageRepository.DeleteImage(image.ID);
-            }
+            await _imageRepository.DeleteImage(image.ID);
             return RedirectToAction(nameof(Index));
         }
     }
